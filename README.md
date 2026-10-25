@@ -1,0 +1,38 @@
+# MenuView width / rotation reproduction (expo/expo#52194)
+
+Reproduces: `@expo/ui` `MenuView` full-width trigger measures unbounded on iOS and keeps its
+first size after rotation. Upstream issue: https://github.com/expo/expo/issues/52194
+Upstream fix in progress: https://github.com/expo/expo/pull/52205
+
+## Run
+
+```bash
+npm install
+npx expo run:ios          # development build, New Architecture, iOS simulator
+```
+
+Rotation is enabled (`orientation: "default"` in app.json). Use the **Rotate** button at the top,
+which switches the interface between portrait and landscape through `expo-screen-orientation`, or
+rotate the simulator with `Cmd + Left/Right Arrow`. Both reproduce it.
+
+## What to look at
+
+The screen shows three groups:
+
+1. **MenuView, long-press** — three full-width rows wrapped in `MenuView` with `shouldOpenOnLongPress`.
+2. **MenuView, tap** — one full-width row wrapped in a tap-to-open `MenuView`.
+3. **MenuView, small trigger** — a pill-shaped trigger that should hug its content.
+4. **Plain React Native** — the same rows without `MenuView`, as the reference.
+
+## Expected
+
+- In portrait, every `MenuView` row is as wide as the plain rows, titles wrap, chevron is visible.
+- After rotating to landscape and back, `MenuView` rows reflow like the plain rows.
+- The small trigger hugs its content and the text after it sits right next to it.
+
+## Actual (before the fix, SDK 58 / @expo/ui 58.0.23)
+
+- `MenuView` rows are measured with an unbounded width: titles do not wrap, the row is wider
+  than the screen, the chevron is pushed off-screen, and the row is clipped at the right edge.
+- After rotation the `MenuView` rows keep the size measured before the rotation. Plain rows reflow.
+- Long-press and tap still open the menu, so only the trigger layout is affected.
