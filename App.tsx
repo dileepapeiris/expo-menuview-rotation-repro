@@ -1,6 +1,6 @@
 import { MenuView } from '@expo/ui/community/menu';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 // Repro for https://github.com/expo/expo/issues/52194
 //
@@ -32,7 +32,7 @@ function Row({ title }: { title: string }) {
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.screen}>
+    <View style={styles.screen}>
       <StatusBar style="dark" />
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.heading}>Inside MenuView</Text>
@@ -47,13 +47,13 @@ export default function App() {
           <Row key={title} title={title} />
         ))}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: '#fff' },
-  content: { padding: 16 },
+  content: { padding: 16, paddingTop: 72 },
   heading: { fontSize: 13, fontWeight: '600', color: '#888', marginTop: 24, marginBottom: 8 },
   row: {
     flexDirection: 'row',
