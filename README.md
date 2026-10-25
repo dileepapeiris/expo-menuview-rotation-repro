@@ -4,6 +4,25 @@ Reproduces: `@expo/ui` `MenuView` full-width trigger measures unbounded on iOS a
 first size after rotation. Upstream issue: https://github.com/expo/expo/issues/52194
 Upstream fix in progress: https://github.com/expo/expo/pull/52205
 
+## What it looks like (iOS 26.5 simulator, iPhone 17, @expo/ui 58.0.23)
+
+| Portrait, first layout | Landscape | Portrait again, after rotating back |
+| --- | --- | --- |
+| ![portrait before](media/1-portrait-before.png) | ![landscape](media/2-landscape.png) | ![portrait after](media/3-portrait-after-rotation.png) |
+
+- Portrait: the `MenuView` rows are measured with an unbounded width. Titles do not wrap, the rows
+  run past the right edge, the chevrons are off-screen. The plain rows below wrap onto three lines.
+- Landscape: the window is 874 pt wide, so the oversized rows happen to fit.
+- Portrait again: the `MenuView` rows keep the size they had and are clipped again, while the plain
+  rows reflowed to the new width.
+
+## Status
+
+- Upstream issue: https://github.com/expo/expo/issues/52194
+- Fix under review: https://github.com/expo/expo/pull/52205 (`RNHostView` gets a `boundedByHost`
+  flag so the trigger is measured within the space Yoga gives the host, and the host is no longer
+  pinned to its first content size)
+
 ## Run
 
 ```bash
@@ -11,9 +30,8 @@ npm install
 npx expo run:ios          # development build, New Architecture, iOS simulator
 ```
 
-Rotation is enabled (`orientation: "default"` in app.json). Use the **Rotate** button at the top,
-which switches the interface between portrait and landscape through `expo-screen-orientation`, or
-rotate the simulator with `Cmd + Left/Right Arrow`. Both reproduce it.
+Rotation is enabled (`orientation: "default"` in app.json). Rotate the simulator with
+`Cmd + Left/Right Arrow` (Device menu, Rotate Left / Rotate Right).
 
 ## What to look at
 
