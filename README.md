@@ -30,7 +30,7 @@ chevron, and reflow on rotation.
 ## Status
 
 - Upstream issue: https://github.com/expo/expo/issues/52194
-- Fix: PR_LINK_PLACEHOLDER
+- Fix: https://github.com/expo/expo/pull/52237
 - Related, by an Expo contributor: https://github.com/expo/expo/pull/52205
 
 ## Run
@@ -74,7 +74,7 @@ then the same three rows plain.
 ## Status
 
 - Upstream issue: https://github.com/expo/expo/issues/52194
-- Fix: PR_LINK_PLACEHOLDER
+- Fix: https://github.com/expo/expo/pull/52237
 - Related, by an Expo contributor: https://github.com/expo/expo/pull/52205
 
 ## Run
