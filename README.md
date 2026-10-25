@@ -10,11 +10,55 @@ Upstream fix in progress: https://github.com/expo/expo/pull/52205
 | --- | --- | --- |
 | ![portrait before](media/1-portrait-before.png) | ![landscape](media/2-landscape.png) | ![portrait after](media/3-portrait-after-rotation.png) |
 
-- Portrait: the `MenuView` rows are measured with an unbounded width. Titles do not wrap, the rows
-  run past the right edge, the chevrons are off-screen. The plain rows below wrap onto three lines.
-- Landscape: the window is 874 pt wide, so the oversized rows happen to fit.
-- Portrait again: the `MenuView` rows keep the size they had and are clipped again, while the plain
-  rows reflowed to the new width.
+- Portrait: the `MenuView` rows run past the right edge and the chevron is cut off. The plain rows
+  wrap.
+- Landscape: the window is wider, so the oversized rows happen to fit.
+- Portrait again: the `MenuView` rows are clipped again, the plain rows reflowed.
+
+## Status
+
+- Upstream issue: https://github.com/expo/expo/issues/52194
+- Fix under review: https://github.com/expo/expo/pull/52205 (`RNHostView` gets a `boundedByHost`
+  flag so the trigger is measured within the space Yoga gives the host, and the host is no longer
+  pinned to its first content size)
+
+## Run
+
+```bash
+npm install
+npx expo run:ios          # development build, New Architecture, iOS simulator
+```
+
+Rotation is enabled (`orientation: "default"` in app.json). Rotate the simulator with
+`Cmd + Left/Right Arrow` (Device menu, Rotate Left / Rotate Right).
+
+## What to look at
+
+The same row is rendered twice: three rows wrapped in `MenuView` (long-press opens the menu),
+then the same three rows plain.
+
+## Expected
+
+- Both sets fill the screen width and the long titles wrap. The chevron is visible.
+- After rotating to landscape and back, both sets reflow to the new width.
+
+## Actual (SDK 58, @expo/ui 58.0.23)
+
+- The `MenuView` rows are measured with an unbounded width: the title does not wrap, the row is
+  wider than the screen and the chevron is cut off.
+- After rotating and back, the `MenuView` rows keep the size they had. The plain rows reflow.
+- Long-press still opens the menu, so only the trigger layout is affected.
+
+## What it looks like (iOS 26.5 simulator, iPhone 17, @expo/ui 58.0.23)
+
+| Portrait, first layout | Landscape | Portrait again, after rotating back |
+| --- | --- | --- |
+| ![portrait before](media/1-portrait-before.png) | ![landscape](media/2-landscape.png) | ![portrait after](media/3-portrait-after-rotation.png) |
+
+- Portrait: the `MenuView` rows run past the right edge and the chevron is cut off. The plain rows
+  wrap.
+- Landscape: the window is wider, so the oversized rows happen to fit.
+- Portrait again: the `MenuView` rows are clipped again, the plain rows reflowed.
 
 ## Status
 
