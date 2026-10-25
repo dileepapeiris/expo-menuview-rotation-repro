@@ -4,9 +4,9 @@ Reproduces: `@expo/ui` `MenuView` full-width trigger measures unbounded on iOS a
 first size after rotation. Upstream issue: https://github.com/expo/expo/issues/52194
 Upstream fix in progress: https://github.com/expo/expo/pull/52205
 
-## What it looks like (iOS 26.5 simulator, iPhone 17, @expo/ui 58.0.23)
+## Before the fix (iOS 26.5 simulator, iPhone 17, @expo/ui 58.0.23)
 
-| Portrait, first layout | Landscape | Portrait again, after rotating back |
+| Portrait | Landscape | Portrait again, after rotating back |
 | --- | --- | --- |
 | ![portrait before](media/1-portrait-before.png) | ![landscape](media/2-landscape.png) | ![portrait after](media/3-portrait-after-rotation.png) |
 
@@ -15,12 +15,23 @@ Upstream fix in progress: https://github.com/expo/expo/pull/52205
 - Landscape: the window is wider, so the oversized rows happen to fit.
 - Portrait again: the `MenuView` rows are clipped again, the plain rows reflowed.
 
+## After the fix
+
+Same app, with the change from the pull request below applied to `@expo/ui` and
+`expo-modules-core` in `node_modules` and the Expo modules built from source.
+
+| Portrait | Landscape | Portrait again, after rotating back |
+| --- | --- | --- |
+| ![portrait after fix](media/4-portrait-after-fix.png) | ![landscape after fix](media/5-landscape-after-fix.png) | ![portrait after rotation, after fix](media/6-portrait-after-rotation-after-fix.png) |
+
+The `MenuView` rows now match the plain rows in every state: they fill the width, wrap, show the
+chevron, and reflow on rotation.
+
 ## Status
 
 - Upstream issue: https://github.com/expo/expo/issues/52194
-- Fix under review: https://github.com/expo/expo/pull/52205 (`RNHostView` gets a `boundedByHost`
-  flag so the trigger is measured within the space Yoga gives the host, and the host is no longer
-  pinned to its first content size)
+- Fix: PR_LINK_PLACEHOLDER
+- Related, by an Expo contributor: https://github.com/expo/expo/pull/52205
 
 ## Run
 
@@ -63,9 +74,8 @@ then the same three rows plain.
 ## Status
 
 - Upstream issue: https://github.com/expo/expo/issues/52194
-- Fix under review: https://github.com/expo/expo/pull/52205 (`RNHostView` gets a `boundedByHost`
-  flag so the trigger is measured within the space Yoga gives the host, and the host is no longer
-  pinned to its first content size)
+- Fix: PR_LINK_PLACEHOLDER
+- Related, by an Expo contributor: https://github.com/expo/expo/pull/52205
 
 ## Run
 
