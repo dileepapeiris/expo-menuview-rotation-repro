@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import * as ScreenOrientation from 'expo-screen-orientation';
-import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { MenuView, type MenuAction } from '@expo/ui/community/menu';
 
 // Reproduction for https://github.com/expo/expo/issues/52194
@@ -35,16 +34,6 @@ function Row({ title }: { title: string }) {
 
 export default function App() {
   const { width, height } = useWindowDimensions();
-  const landscape = width > height;
-
-  // Rotates the interface programmatically so the bug can be reproduced without the Simulator
-  // menus. The physical device/simulator rotation reproduces it the same way.
-  const rotate = () =>
-    ScreenOrientation.lockAsync(
-      landscape
-        ? ScreenOrientation.OrientationLock.PORTRAIT_UP
-        : ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
-    );
 
   return (
     <SafeAreaView style={styles.root}>
@@ -53,11 +42,8 @@ export default function App() {
         <Text style={styles.heading}>MenuView width repro (#52194)</Text>
         <Text style={styles.hint}>
           {`Window ${Math.round(width)} × ${Math.round(height)}. `}
-          Rotate portrait ↔ landscape. MenuView rows should wrap and reflow exactly like the plain rows.
+          Rotate the simulator (Cmd + Left/Right arrow). MenuView rows should wrap and reflow exactly like the plain rows.
         </Text>
-        <Pressable onPress={rotate} style={styles.rotateButton} testID="rotate">
-          <Text style={styles.rotateText}>{landscape ? 'Rotate to portrait' : 'Rotate to landscape'}</Text>
-        </Pressable>
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
@@ -142,13 +128,4 @@ const styles = StyleSheet.create({
   },
   pillText: { fontSize: 14, fontWeight: '600', color: '#1f4e8c' },
   inlineText: { fontSize: 14, color: '#555' },
-  rotateButton: {
-    alignSelf: 'flex-start',
-    marginTop: 6,
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 8,
-    backgroundColor: '#1f4e8c',
-  },
-  rotateText: { color: '#fff', fontSize: 14, fontWeight: '600' },
 });
