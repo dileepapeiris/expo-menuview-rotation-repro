@@ -11,9 +11,9 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 // and back, the MenuView row keeps its old size.
 
 const titles = [
-  'Quarterly planning notes and follow-ups from the product design review meeting',
-  'A longer headline that should wrap onto multiple lines instead of being clipped by the row',
-  'Release checklist for the mobile application, including signing and store metadata',
+  'test test test test test test test test test test test test test test',
+  'hello hello hello hello hello hello hello hello hello hello hello hello',
+  'row row row row row row row row row row row row row row row row row row',
 ];
 
 const actions = [
